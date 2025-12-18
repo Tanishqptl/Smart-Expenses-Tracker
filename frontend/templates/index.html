@@ -1,0 +1,606 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Smart Expense Tracker{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1 class="hero-title">
+                <span class="gradient-text">Welcome Back!</span>
+                <br>Track Your Smart Expenses
+            </h1>
+            <p class="hero-subtitle">
+                Monitor your spending, manage your budget, and achieve your financial goals with our intuitive expense tracker.
+            </p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('add_expense_page') }}" class="btn btn-primary btn-large">
+                    <i class="fas fa-plus-circle"></i>
+                    Add New Expense
+                </a>
+                <a href="{{ url_for('summary_page') }}" class="btn btn-secondary btn-large">
+                    <i class="fas fa-chart-pie"></i>
+                    View Analytics
+                </a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="hero-illustration">
+                <img src="{{ url_for('static', filename='images/hero-dashboard.svg') }}" alt="Dashboard Illustration" class="hero-img">
+            </div>
+            <div class="floating-cards">
+                <div class="floating-card card-1">
+                    <i class="fas fa-money-bill-wave card-icon" aria-hidden="true"></i>
+                </div>
+                <div class="floating-card card-2">
+                    <i class="fas fa-chart-line card-icon" aria-hidden="true"></i>
+                </div>
+                <div class="floating-card card-3">
+                    <i class="fas fa-piggy-bank card-icon" aria-hidden="true"></i>
+                </div>
+                <div class="floating-card card-4">
+                    <i class="fas fa-wallet card-icon" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions Bar -->
+<section class="quick-actions">
+    <div class="quick-actions-container">
+        <div class="quick-action-item" onclick="window.location.href='{{ url_for('add_expense_page') }}'">
+            <i class="fas fa-plus-circle quick-action-icon" aria-hidden="true"></i>
+            <span>Quick Add</span>
+        </div>
+        <div class="quick-action-item" onclick="window.location.href='{{ url_for('summary_page') }}'">
+            <i class="fas fa-chart-pie quick-action-icon" aria-hidden="true"></i>
+            <span>Analytics</span>
+        </div>
+        <div class="quick-action-item" onclick="showBudgetModal()">
+            <i class="fas fa-wallet quick-action-icon" aria-hidden="true"></i>
+            <span>Budget</span>
+        </div>
+        <div class="quick-action-item" onclick="exportData()">
+            <i class="fas fa-file-export quick-action-icon" aria-hidden="true"></i>
+            <span>Export</span>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Overview -->
+<section class="stats-section">
+        <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-chart-area section-icon" aria-hidden="true"></i>
+            Financial Overview
+        </h2>
+        <div class="stats-date-filter">
+            <select class="date-filter-select" onchange="filterStats(this.value)">
+                <option value="month">This Month</option>
+                <option value="week">This Week</option>
+                <option value="year">This Year</option>
+                <option value="all">All Time</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card stat-primary">
+                <div class="stat-icon">
+                <i class="fas fa-euro-sign stat-icon-img" aria-hidden="true"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">€{{ "%.2f"|format(total) }}</h3>
+                <p class="stat-label">Total Expenses</p>
+                <div class="stat-trend">
+                    <img src="{{ url_for('static', filename='images/trend-up.svg') }}" alt="Trend Up" class="trend-icon">
+                    <span class="trend-text positive">+12% from last month</span>
+                </div>
+            </div>
+            <div class="stat-chart">
+                <canvas id="miniChart1" width="100" height="40"></canvas>
+            </div>
+        </div>
+
+        <div class="stat-card stat-success">
+                <div class="stat-icon">
+                <i class="fas fa-receipt stat-icon-img" aria-hidden="true"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ transactions }}</h3>
+                <p class="stat-label">Transactions</p>
+                <div class="stat-trend">
+                    <i class="fas fa-minus trend-icon" aria-hidden="true"></i>
+                    <span class="trend-text neutral">Same as last week</span>
+                </div>
+            </div>
+            <div class="stat-chart">
+                <canvas id="miniChart2" width="100" height="40"></canvas>
+            </div>
+        </div>
+
+        <div class="stat-card stat-info">
+                <div class="stat-icon">
+                <i class="fas fa-calculator stat-icon-img" aria-hidden="true"></i>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">€{{ "%.2f"|format(total/transactions if transactions > 0 else 0) }}</h3>
+                <p class="stat-label">Average Expense</p>
+                <div class="stat-trend">
+                    <img src="{{ url_for('static', filename='images/trend-down.svg') }}" alt="Trend Down" class="trend-icon">
+                    <span class="trend-text negative">-5% from average</span>
+                </div>
+            </div>
+            <div class="stat-chart">
+                <canvas id="miniChart3" width="100" height="40"></canvas>
+            </div>
+        </div>
+
+        <div class="stat-card stat-warning">
+                <div class="stat-icon">
+                <i class="fas fa-wallet stat-icon-img" aria-hidden="true"></i>
+            </div>
+                <div class="stat-content">
+                <h3 id="budget-remaining" class="stat-value">€{{ "%.2f"|format(1000 - total) }}</h3>
+                <p class="stat-label">Budget Remaining</p>
+                <div style="font-size:0.8rem;color:#6c757d;margin-top:6px">Monthly Budget: <span id="budget-total">€1000.00</span></div>
+                <div class="stat-trend">
+                    <i class="fas fa-exclamation-triangle trend-icon" aria-hidden="true"></i>
+                    <span class="trend-text {% if total < 1000 %}positive{% else %}negative{% endif %}">
+                        {% if total < 1000 %}On Track{% else %}Over Budget{% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="stat-chart">
+                <canvas id="miniChart4" width="100" height="40"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Spending Alert -->
+<div id="spending-alert" class="alert-section"></div>
+
+<!-- Category Overview -->
+<section class="category-overview">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-th-large section-icon" aria-hidden="true"></i>
+            Spending by Category
+        </h2>
+        <a href="{{ url_for('summary_page') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i>
+            View All
+        </a>
+    </div>
+    
+    <div class="category-grid">
+        {% set category_totals = {} %}
+        {% for expense in expenses %}
+            {% set _ = category_totals.update({expense.category: category_totals.get(expense.category, 0) + expense.amount}) %}
+        {% endfor %}
+        
+        {% for category, amount in (category_totals.items()|list)[:6] %}
+            <div class="category-card" onclick="filterByCategory('{{ category }}')">
+                <div class="category-icon-container">
+                    {% if category == 'Food' %}
+                        <i class="fas fa-utensils category-icon" aria-hidden="true"></i>
+                    {% elif category == 'Transport' %}
+                        <i class="fas fa-bus category-icon" aria-hidden="true"></i>
+                    {% elif category == 'Utilities' %}
+                        <i class="fas fa-plug category-icon" aria-hidden="true"></i>
+                    {% elif category == 'Entertainment' %}
+                        <i class="fas fa-film category-icon" aria-hidden="true"></i>
+                    {% elif category == 'Shopping' %}
+                        <i class="fas fa-shopping-bag category-icon" aria-hidden="true"></i>
+                    {% elif category == 'Healthcare' %}
+                        <i class="fas fa-notes-medical category-icon" aria-hidden="true"></i>
+                    {% else %}
+                        <i class="fas fa-ellipsis-h category-icon" aria-hidden="true"></i>
+                    {% endif %}
+                </div>
+                <h4 class="category-name">{{ category }}</h4>
+                <p class="category-amount">€{{ "%.2f"|format(amount) }}</p>
+                <div class="category-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ (amount/(category_totals.values() | sum)*100) | round(1) }}%"></div>
+                    </div>
+                    <span class="progress-text">{{ "%.1f"|format(amount/(category_totals.values() | sum)*100) }}%</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Recent Expenses with Enhanced Visuals -->
+<section class="expenses-section">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-history section-icon" aria-hidden="true"></i>
+            Recent Expenses
+        </h2>
+        <div class="expenses-actions">
+            <button class="btn btn-outline" onclick="sortExpenses('date')">
+                <i class="fas fa-calendar-alt action-icon" aria-hidden="true"></i>
+                Sort by Date
+            </button>
+            <button class="btn btn-outline" onclick="sortExpenses('amount')">
+                <i class="fas fa-sort-amount-down action-icon" aria-hidden="true"></i>
+                Sort by Amount
+            </button>
+            <a href="{{ url_for('add_expense_page') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Add New
+            </a>
+        </div>
+    </div>
+
+    <div class="expenses-container">
+        {% if expenses %}
+            <div class="expense-list">
+                {% for expense in expenses[:10] %}
+                    <div class="expense-item" data-id="{{ expense.id }}" data-category="{{ expense.category }}">
+                        <div class="expense-visual">
+                            <div class="expense-icon">
+                                {% if expense.category == 'Food' %}
+                                    <i class="fas fa-utensils category-icon" aria-hidden="true"></i>
+                                {% elif expense.category == 'Transport' %}
+                                    <i class="fas fa-bus category-icon" aria-hidden="true"></i>
+                                {% elif expense.category == 'Utilities' %}
+                                    <i class="fas fa-plug category-icon" aria-hidden="true"></i>
+                                {% elif expense.category == 'Entertainment' %}
+                                    <i class="fas fa-film category-icon" aria-hidden="true"></i>
+                                {% elif expense.category == 'Shopping' %}
+                                    <i class="fas fa-shopping-bag category-icon" aria-hidden="true"></i>
+                                {% elif expense.category == 'Healthcare' %}
+                                    <i class="fas fa-notes-medical category-icon" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fas fa-ellipsis-h category-icon" aria-hidden="true"></i>
+                                {% endif %}
+                            </div>
+                            <div class="expense-indicator">
+                                <div class="indicator-dot" style="background: {% if expense.category == 'Food' %}#52b788{% elif expense.category == 'Transport' %}#0077b6{% elif expense.category == 'Utilities' %}#00b4d8{% elif expense.category == 'Entertainment' %}#f4a261{% elif expense.category == 'Shopping' %}#e76f51{% elif expense.category == 'Healthcare' %}#e63946{% else %}#6c757d{% endif %}"></div>
+                            </div>
+                        </div>
+                        <div class="expense-details">
+                            <h4 class="expense-title">{{ expense.description or expense.category }}</h4>
+                            <p class="expense-meta">
+                                <span class="expense-category">
+                                    <i class="fas fa-tag meta-icon" aria-hidden="true"></i>
+                                    {{ expense.category }}
+                                </span>
+                                <span class="expense-date">
+                                    <i class="fas fa-calendar-alt meta-icon" aria-hidden="true"></i>
+                                    {{ expense.date.strftime('%d %b %Y') }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="expense-amount">
+                            <span class="amount-value">€{{ "%.2f"|format(expense.amount) }}</span>
+                            <div class="expense-actions">
+                                <button class="action-btn" onclick="editExpense({{ expense.id }})">
+                                    <i class="fas fa-edit action-icon-small" aria-hidden="true"></i>
+                                </button>
+                                <button class="action-btn" onclick="deleteExpense({{ expense.id }})">
+                                    <i class="fas fa-trash action-icon-small" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="view-all-container">
+                <a href="{{ url_for('summary_page') }}" class="btn btn-outline btn-large">
+                    <img src="{{ url_for('static', filename='images/quick-analytics.svg') }}" alt="View All" class="btn-icon">
+                    View All Expenses
+                </a>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-wallet empty-img" aria-hidden="true" style="font-size:96px;color:#cbd5e1"></i>
+                </div>
+                <h3>No expenses yet</h3>
+                <p>Start tracking your expenses by adding your first transaction</p>
+                <div class="empty-actions">
+                    <a href="{{ url_for('add_expense_page') }}" class="btn btn-primary btn-large">
+                        <i class="fas fa-plus btn-icon" aria-hidden="true"></i>
+                        Add First Expense
+                    </a>
+                    <button class="btn btn-secondary btn-large" onclick="importSampleData()">
+                        <i class="fas fa-file-import btn-icon" aria-hidden="true"></i>
+                        Import Sample Data
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Financial Tips Section -->
+<section class="tips-section">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-lightbulb section-icon" aria-hidden="true"></i>
+            Financial Tips
+        </h2>
+    </div>
+    
+    <div class="tips-grid">
+        <div class="tip-card">
+            <i class="fas fa-wallet tip-image" aria-hidden="true" style="font-size:48px"></i>
+            <div class="tip-content">
+                <h4>Set Monthly Budgets</h4>
+                <p>Allocate specific amounts for each category to control spending</p>
+            </div>
+        </div>
+        
+        <div class="tip-card">
+            <i class="fas fa-check-circle tip-image" aria-hidden="true" style="font-size:48px"></i>
+            <div class="tip-content">
+                <h4>Track Daily</h4>
+                <p>Record expenses as soon as they happen for accurate tracking</p>
+            </div>
+        </div>
+        
+        <div class="tip-card">
+            <i class="fas fa-search tip-image" aria-hidden="true" style="font-size:48px"></i>
+            <div class="tip-content">
+                <h4>Weekly Reviews</h4>
+                <p>Analyze your spending patterns weekly to identify areas for improvement</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Load spending alert on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadSpendingAlert();
+    
+    // Add entrance animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    });
+    
+    document.querySelectorAll('.stat-card, .expense-item, .category-card, .tip-card').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Initialize mini charts
+    initializeMiniCharts();
+    
+    // Animate numbers
+    animateNumbers();
+});
+
+// Mini Chart Initialization
+function initializeMiniCharts() {
+    const chartOptions = {
+        type: 'line',
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            },
+            elements: {
+                line: {
+                    borderWidth: 2,
+                    tension: 0.4
+                },
+                point: {
+                    radius: 0
+                }
+            }
+        }
+    };
+    
+    // Chart 1 - Total Expenses
+    new Chart(document.getElementById('miniChart1'), {
+        ...chartOptions,
+        data: {
+            labels: ['', '', '', '', ''],
+            datasets: [{
+                data: [65, 78, 90, 81, 95],
+                borderColor: '#0077b6',
+                backgroundColor: 'rgba(0, 119, 182, 0.1)'
+            }]
+        }
+    });
+    
+    // Chart 2 - Transactions
+    new Chart(document.getElementById('miniChart2'), {
+        ...chartOptions,
+        data: {
+            labels: ['', '', '', '', ''],
+            datasets: [{
+                data: [12, 15, 13, 17, 14],
+                borderColor: '#52b788',
+                backgroundColor: 'rgba(82, 183, 136, 0.1)'
+            }]
+        }
+    });
+    
+    // Chart 3 - Average
+    new Chart(document.getElementById('miniChart3'), {
+        ...chartOptions,
+        data: {
+            labels: ['', '', '', '', ''],
+            datasets: [{
+                data: [45, 42, 38, 40, 35],
+                borderColor: '#667eea',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)'
+            }]
+        }
+    });
+    
+    // Chart 4 - Budget
+    new Chart(document.getElementById('miniChart4'), {
+        ...chartOptions,
+        data: {
+            labels: ['', '', '', '', ''],
+            datasets: [{
+                data: [80, 75, 82, 78, 70],
+                borderColor: '#f4a261',
+                backgroundColor: 'rgba(244, 162, 97, 0.1)'
+            }]
+        }
+    });
+}
+
+// Animate Numbers
+function animateNumbers() {
+    const statValues = document.querySelectorAll('.stat-value');
+    statValues.forEach(element => {
+        const finalValue = element.textContent;
+        const isCurrency = finalValue.includes('€');
+        const numericValue = parseFloat(finalValue.replace(/[^0-9.-]+/g, ''));
+        
+        if (!isNaN(numericValue)) {
+            let currentValue = 0;
+            const increment = numericValue / 50;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= numericValue) {
+                    currentValue = numericValue;
+                    clearInterval(timer);
+                }
+                element.textContent = isCurrency ? 
+                    `€${currentValue.toFixed(2)}` : 
+                    Math.floor(currentValue).toString();
+            }, 20);
+        }
+    });
+}
+
+// Filter by Category
+function filterByCategory(category) {
+    window.location.href = `{{ url_for('summary_page') }}?category=${category}`;
+}
+
+// Sort Expenses
+function sortExpenses(sortBy) {
+    const url = new URL(window.location);
+    url.searchParams.set('sort', sortBy);
+    window.location.href = url.toString();
+}
+
+// Filter Stats
+function filterStats(period) {
+    // This would typically make an API call
+    console.log('Filtering stats by:', period);
+}
+
+// Budget & Export helpers
+const BUDGET_KEY = 'tracker_monthly_budget';
+
+function getBudget() {
+    const v = localStorage.getItem(BUDGET_KEY);
+    return v ? parseFloat(v) : 1000.0;
+}
+
+function setBudget(amount) {
+    localStorage.setItem(BUDGET_KEY, parseFloat(amount).toFixed(2));
+    updateBudgetUI();
+}
+
+function updateBudgetUI() {
+    // serverTotal is injected below
+    const total = Number(window.SERVER_TOTAL || {{ total|default(0) }});
+    const budget = getBudget();
+    const remaining = Math.max(budget - total, 0);
+    const remEl = document.getElementById('budget-remaining');
+    const totEl = document.getElementById('budget-total');
+    if (remEl) remEl.textContent = `€${remaining.toFixed(2)}`;
+    if (totEl) totEl.textContent = `€${budget.toFixed(2)}`;
+    // color state
+    if (remaining <= 0) remEl.classList.add('over-budget'); else remEl.classList.remove('over-budget');
+}
+
+// Show Budget Modal (inline modal)
+function showBudgetModal() {
+    // avoid duplicate
+    if (document.getElementById('budget-modal')) return;
+    const modal = document.createElement('div');
+    modal.id = 'budget-modal';
+    modal.style = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);z-index:2000';
+    modal.innerHTML = `
+        <div style="background:#fff;padding:20px;border-radius:12px;min-width:300px;max-width:90%">
+            <h3 style="margin-top:0">Set Monthly Budget</h3>
+            <div style="margin:8px 0">Current budget: <strong id="bm-current">€${getBudget().toFixed(2)}</strong></div>
+            <input id="bm-input" type="number" min="0" step="0.01" style="width:100%;padding:8px;border:1px solid #e6eef7;border-radius:6px" placeholder="Enter budget in EUR">
+            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+                <button id="bm-cancel" class="btn btn-secondary">Cancel</button>
+                <button id="bm-save" class="btn btn-primary">Save</button>
+            </div>
+        </div>`;
+    document.body.appendChild(modal);
+    document.getElementById('bm-cancel').onclick = () => modal.remove();
+    document.getElementById('bm-save').onclick = () => {
+        const v = Number(document.getElementById('bm-input').value || 0);
+        if (isNaN(v) || v < 0) { alert('Enter a valid budget'); return; }
+        setBudget(v);
+        modal.remove();
+    };
+}
+
+// Export Data -> fetch /api/expenses and download CSV
+async function exportData() {
+    try {
+        const res = await fetch(`{{ url_for('expenses.get_expenses') }}`);
+        const json = await res.json();
+        if (!json.success) { alert('Failed to fetch expenses'); return; }
+        const rows = json.data;
+        if (!rows || !rows.length) { alert('No expenses to export'); return; }
+        // Build CSV
+        const headers = Object.keys(rows[0]);
+        const csv = [headers.join(','), ...rows.map(r => headers.map(h => '"'+String(r[h] ?? '').replace(/"/g,'""')+'"').join(','))].join('\n');
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `expenses_export_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    } catch (e) {
+        console.error(e);
+        alert('Export failed');
+    }
+}
+
+// Import Sample Data
+function importSampleData() {
+    // Import sample data
+    console.log('Import sample data');
+}
+
+// Edit Expense
+function editExpense(id) {
+    window.location.href = `/edit-expense/${id}`;
+}
+
+// Delete Expense
+function deleteExpense(id) {
+    if (confirm('Are you sure you want to delete this expense?')) {
+        // Delete functionality
+        console.log('Delete expense:', id);
+    }
+}
+</script>
+{% endblock %}

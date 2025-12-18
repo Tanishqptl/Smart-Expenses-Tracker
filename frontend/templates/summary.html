@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Summary - Smart Expense Tracker{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="header-content">
+        <div class="header-image">
+            <i class="fas fa-chart-pie header-img" aria-hidden="true" style="font-size:64px"></i>
+        </div>
+        <div class="header-text">
+            <h1>Expense Summary</h1>
+            <p>Analyze your spending patterns and financial insights</p>
+        </div>
+    </div>
+</section>
+
+<!-- Summary Stats -->
+<section class="summary-stats">
+    <div class="stats-grid">
+        <div class="summary-card summary-primary">
+            <div class="summary-icon">
+                <i class="fas fa-wallet summary-icon-img" aria-hidden="true"></i>
+            </div>
+            <div class="summary-content">
+                <h3>€{{ "%.2f"|format(expenses | sum(attribute='amount')) }}</h3>
+                <p>Total Spent</p>
+            </div>
+        </div>
+
+        <div class="summary-card summary-success">
+            <div class="summary-icon">
+                <i class="fas fa-tags summary-icon-img" aria-hidden="true"></i>
+            </div>
+            <div class="summary-content">
+                <h3>{{ category_totals | length }}</h3>
+                <p>Categories</p>
+            </div>
+        </div>
+
+        <div class="summary-card summary-info">
+            <div class="summary-icon">
+                <i class="fas fa-receipt summary-icon-img" aria-hidden="true"></i>
+            </div>
+            <div class="summary-content">
+                <h3>{{ expenses | length }}</h3>
+                <p>Transactions</p>
+            </div>
+        </div>
+
+        <div class="summary-card summary-warning">
+            <div class="summary-icon">
+                <i class="fas fa-calculator summary-icon-img" aria-hidden="true"></i>
+            </div>
+            <div class="summary-content">
+                <h3>€{{ "%.2f"|format((expenses | sum(attribute='amount')) / (expenses | length) if expenses else 0) }}</h3>
+                <p>Average Expense</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Charts Section -->
+<section class="charts-section">
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>
+                    <i class="fas fa-chart-pie chart-icon" aria-hidden="true"></i>
+                    Expenses by Category
+                </h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>
+                    <i class="fas fa-chart-line chart-icon" aria-hidden="true"></i>
+                    Monthly Trend
+                </h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="monthlyChart"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Category Breakdown -->
+<section class="breakdown-section">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="fas fa-chart-bar section-icon" aria-hidden="true"></i>
+            Category Breakdown
+        </h2>
+    </div>
+
+    <div class="breakdown-container">
+        {% if category_totals %}
+            {% set total = category_totals.values() | sum %}
+            {% for category, amount in category_totals.items() | sort(attribute='1', reverse=true) %}
+                <div class="breakdown-item">
+                    <div class="breakdown-header">
+                        <div class="breakdown-info">
+                            <div class="breakdown-icon">
+                                {% if category == 'Food' %}
+                                    <i class="fas fa-utensils breakdown-icon-img" aria-hidden="true"></i>
+                                {% elif category == 'Transport' %}
+                                    <i class="fas fa-bus breakdown-icon-img" aria-hidden="true"></i>
+                                {% elif category == 'Utilities' %}
+                                    <i class="fas fa-plug breakdown-icon-img" aria-hidden="true"></i>
+                                {% elif category == 'Entertainment' %}
+                                    <i class="fas fa-film breakdown-icon-img" aria-hidden="true"></i>
+                                {% elif category == 'Shopping' %}
+                                    <i class="fas fa-shopping-bag breakdown-icon-img" aria-hidden="true"></i>
+                                {% elif category == 'Healthcare' %}
+                                    <i class="fas fa-notes-medical breakdown-icon-img" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fas fa-ellipsis-h breakdown-icon-img" aria-hidden="true"></i>
+                                {% endif %}
+                            </div>
+                            <div class="breakdown-details">
+                                <h4>{{ category }}</h4>
+                                <p>{{ "%.1f"|format(amount/total*100) }}% of total</p>
+                            </div>
+                        </div>
+                        <div class="breakdown-amount">
+                            <span class="amount-value">€{{ "%.2f"|format(amount) }}</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ (amount/total*100) | round(1) }}%"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                    <div class="empty-icon">
+                    <i class="fas fa-ban empty-img" aria-hidden="true" style="font-size:64px;color:#cbd5e1"></i>
+                </div>
+                <h3>No expense data available</h3>
+                <p>Start adding expenses to see your spending breakdown</p>
+                <a href="{{ url_for('add_expense_page') }}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i>
+                    Add First Expense
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Category Chart
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    const categoryData = {{ category_totals | tojson }};
+    
+    new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(categoryData),
+            datasets: [{
+                data: Object.values(categoryData),
+                backgroundColor: [
+                    '#00b4d8',
+                    '#0077b6',
+                    '#90e0ef',
+                    '#caf0f8',
+                    '#48cae4',
+                    '#0096c7',
+                    '#023e8a',
+                    '#03045e'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // Monthly Chart
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    const monthlyData = {{ monthly_totals | tojson }};
+    
+    new Chart(monthlyCtx, {
+        type: 'line',
+        data: {
+            labels: Object.keys(monthlyData),
+            datasets: [{
+                label: 'Monthly Expenses',
+                data: Object.values(monthlyData),
+                borderColor: '#00b4d8',
+                backgroundColor: 'rgba(0, 180, 216, 0.1)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '€' + value.toFixed(0);
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Animate elements on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    });
+    
+    document.querySelectorAll('.summary-card, .chart-card, .breakdown-item').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>
+{% endblock %}

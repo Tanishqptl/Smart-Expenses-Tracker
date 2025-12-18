@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Add Expense - Smart Expense Tracker{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="header-content">
+        <div class="header-image">
+            <i class="fas fa-plus-circle header-img" aria-hidden="true" style="font-size:64px"></i>
+        </div>
+        <div class="header-text">
+            <h1>Add New Expense</h1>
+            <p>Record your expense details to track your spending</p>
+        </div>
+    </div>
+</section>
+
+<!-- Add Expense Form -->
+<section class="form-section">
+    <div class="form-container">
+        <div class="form-card">
+            <form method="POST" action="{{ url_for('add_expense') }}" class="expense-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="amount" class="form-label">
+                            <i class="fas fa-euro-sign label-icon" aria-hidden="true"></i>
+                            Amount
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">€</span>
+                            <input type="number" class="form-input with-prefix" id="amount" name="amount" 
+                                   step="0.01" min="0.01" required placeholder="0.00">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category" class="form-label">
+                            <i class="fas fa-tags label-icon" aria-hidden="true"></i>
+                            Category
+                        </label>
+                        <div class="category-grid">
+                            <label class="category-option">
+                                <input type="radio" name="category" value="Food" required>
+                                <div class="category-card">
+                                    <i class="fas fa-utensils category-img" aria-hidden="true"></i>
+                                    <span>Food</span>
+                                </div>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="category" value="Transport" required>
+                                <div class="category-card">
+                                    <i class="fas fa-bus category-img" aria-hidden="true"></i>
+                                    <span>Transport</span>
+                                </div>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="category" value="Utilities" required>
+                                <div class="category-card">
+                                    <i class="fas fa-plug category-img" aria-hidden="true"></i>
+                                    <span>Utilities</span>
+                                </div>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="category" value="Entertainment" required>
+                                <div class="category-card">
+                                    <i class="fas fa-film category-img" aria-hidden="true"></i>
+                                    <span>Entertainment</span>
+                                </div>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="category" value="Shopping" required>
+                                <div class="category-card">
+                                    <i class="fas fa-shopping-bag category-img" aria-hidden="true"></i>
+                                    <span>Shopping</span>
+                                </div>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="category" value="Healthcare" required>
+                                <div class="category-card">
+                                    <i class="fas fa-notes-medical category-img" aria-hidden="true"></i>
+                                    <span>Healthcare</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date" class="form-label">
+                            <i class="fas fa-calendar-alt label-icon" aria-hidden="true"></i>
+                            Date
+                        </label>
+                           <input type="date" class="form-input" id="date" name="date" 
+                               value="{{ today }}">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="description" class="form-label">
+                            <i class="fas fa-align-left label-icon" aria-hidden="true"></i>
+                            Description
+                        </label>
+                        <textarea class="form-textarea" id="description" name="description" 
+                                  rows="4" placeholder="Add notes about this expense..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-save"></i>
+                        Save Expense
+                    </button>
+                    <a href="{{ url_for('home') }}" class="btn btn-secondary btn-large">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tips Section -->
+                <div class="tips-card">
+            <div class="tips-header">
+                <i class="fas fa-lightbulb tips-img" aria-hidden="true" style="font-size:36px;margin-right:8px"></i>
+                <h3>Quick Tips</h3>
+            </div>
+            <ul class="tips-list">
+                <li>Be specific with descriptions for better tracking</li>
+                <li>Try to categorize expenses accurately</li>
+                <li>Record expenses as soon as possible</li>
+                <li>Set monthly budgets for each category</li>
+            </ul>
+            <div class="tips-illustration">
+                <i class="fas fa-book-open tips-illustration-img" aria-hidden="true" style="font-size:72px;color:#dbeafe"></i>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set today's date as default
+    const dateInput = document.getElementById('date');
+    if (!dateInput.value) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+    }
+
+    // Handle category selection
+    const categoryOptions = document.querySelectorAll('.category-option input');
+    categoryOptions.forEach(option => {
+        option.addEventListener('change', function() {
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            if (this.checked) {
+                this.nextElementSibling.classList.add('selected');
+            }
+        });
+    });
+
+    // Animate form on scroll
+    const formCard = document.querySelector('.form-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    });
+    observer.observe(formCard);
+});
+</script>
+{% endblock %}

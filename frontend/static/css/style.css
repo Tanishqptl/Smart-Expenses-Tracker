@@ -1,0 +1,429 @@
+:root {
+    --primary-blue: #006fbf;
+    --secondary-green: #28a745;
+    --accent-orange: #ff7a45;
+    --neutral-dark: #2e3a45;
+    --gradient-primary: linear-gradient(135deg, #4fc3f7, #4dd0e1);
+    --border-radius: 12px;
+    --shadow-sm: 0 2px 8px rgba(16,24,40,0.06);
+    --shadow-md: 0 6px 18px rgba(16,24,40,0.12);
+    --shadow-lg: 0 12px 30px rgba(16,24,40,0.18);
+    --transition: all 0.25s ease;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0;
+    font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    background: linear-gradient(180deg, #f7fbff 0%, #fff 100%);
+    color: var(--neutral-dark);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; }
+.btn-primary { background: var(--primary-blue); color: white; }
+.btn-secondary { background: #eef6fb; color: var(--primary-blue); }
+
+.navbar { background: transparent; padding: 1rem 2rem; position: sticky; top: 0; z-index: 40; }
+.nav-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.nav-brand { display:flex; align-items:center; gap:0.75rem; font-weight:700; }
+.nav-link { margin-left: 1rem; color: #51606a; display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 0.75rem; border-radius:8px; }
+.nav-link.active { background: rgba(0,111,191,0.08); color: var(--primary-blue); }
+
+.main-content { padding: 2rem 1rem; min-height: calc(100vh - 200px); }
+
+.footer { padding: 2rem 1rem; background: transparent; }
+
+/* Flash messages */
+.flash-container { position: fixed; top: 1rem; right: 1rem; z-index: 60; }
+.flash-message { display:flex; align-items:center; gap:0.5rem; background: #fff; border-radius:8px; padding:0.5rem 0.75rem; box-shadow: var(--shadow-sm); }
+
+/* Quick Actions Bar */
+.quick-actions {
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.quick-actions-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.quick-action-item {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    min-width: 100px;
+}
+
+.quick-action-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.quick-action-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.quick-action-item span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--neutral-dark);
+}
+
+/* Enhanced Stats Cards */
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-chart {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    opacity: 0.3;
+}
+
+.stat-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.trend-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.trend-text {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.trend-text.positive {
+    color: var(--secondary-green);
+}
+
+.trend-text.negative {
+    color: var(--accent-orange);
+}
+
+.trend-text.neutral {
+    color: #6c757d;
+}
+
+/* Date Filter */
+.stats-date-filter {
+    display: flex;
+    align-items: center;
+}
+
+.date-filter-select {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    color: var(--neutral-dark);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.date-filter-select:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+
+/* Category Overview */
+.category-overview {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.category-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    cursor: pointer;
+    text-align: center;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.category-icon-container {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background: var(--gradient-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.category-name {
+    font-weight: 600;
+    color: var(--neutral-dark);
+    margin-bottom: 0.5rem;
+}
+
+.category-amount {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+}
+
+.category-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 10px;
+    transition: width 1s ease;
+}
+
+.progress-text {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #6c757d;
+    min-width: 35px;
+}
+
+/* Enhanced Expense Items */
+.expense-visual {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.expense-indicator {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.meta-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 0.25rem;
+}
+
+.expenses-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.action-btn:hover {
+    background: rgba(0, 119, 182, 0.1);
+}
+
+.action-icon-small {
+    width: 16px;
+    height: 16px;
+}
+
+.action-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.5rem;
+}
+
+.btn-outline {
+    background: white;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+}
+
+.btn-outline:hover {
+    background: var(--primary-blue);
+    color: white;
+}
+
+/* View All Container */
+.view-all-container {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+}
+
+/* Enhanced Empty State */
+.empty-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+/* Financial Tips Section */
+.tips-section {
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(0, 180, 216, 0.05), rgba(82, 183, 136, 0.05));
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.tip-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    gap: 1rem;
+    transition: var(--transition);
+}
+
+.tip-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.tip-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.tip-content h4 {
+    font-weight: 600;
+    color: var(--neutral-dark);
+    margin-bottom: 0.5rem;
+}
+
+.tip-content p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Floating Card Animation */
+.floating-card.card-4 {
+    top: 20%;
+    left: -30px;
+    animation-delay: 3s;
+}
+
+/* Responsive Design for Dashboard */
+@media (max-width: 768px) {
+    .quick-actions-container {
+        flex-wrap: wrap;
+    }
+    
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .expense-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .expenses-actions {
+        justify-content: center;
+    }
+    
+    .stat-chart {
+        display: none;
+    }
+    
+    .empty-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tip-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .tip-image {
+        margin: 0 auto;
+    }
+}

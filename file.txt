@@ -1,0 +1,59 @@
+
+## API Endpoints
+
+The application also provides REST API endpoints:
+
+- `GET /api/expenses` - Get all expenses
+- `POST /api/expenses` - Add a new expense
+
+## Development
+
+### Adding New Features
+
+1. Create new routes in `app.py`
+2. Add corresponding templates in `frontend/templates/`
+3. Update static files in `frontend/static/`
+4. Test thoroughly
+
+### Database Changes
+
+1. Modify the `Expense` model in `app.py`
+2. Reset the database: `flask reset-db`
+3. Seed with sample data: `flask seed-data`
+
+## Deployment
+
+### Production Setup
+
+1. Set environment variables:
+   ```bash
+   export FLASK_ENV=production
+   export SECRET_KEY=your-production-secret-key
+   ```
+
+2. Use a production WSGI server like Gunicorn:
+   ```bash
+   pip install gunicorn
+   gunicorn -w 4 -b 0.0.0.0:5000 app:app
+   ```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is open source and available under the MIT License.
+
+## Support
+
+For issues and questions:
+- Create an issue on GitHub
+- Check the documentation
+- Review the code comments
+
+Happy expense tracking! 💰

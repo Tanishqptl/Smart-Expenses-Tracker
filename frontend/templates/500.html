@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+<section class="empty-state" style="text-align:center;padding:6rem 1rem">
+    <div class="empty-icon">
+        <i class="fas fa-server empty-img" aria-hidden="true" style="font-size:96px;color:#f87171"></i>
+    </div>
+    <h3>500 — Server Error</h3>
+    <p>Something went wrong on our end. Try again later or contact support.</p>
+    <div style="margin-top:1rem">
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Return Home</a>
+    </div>
+</section>
+{% endblock %}
