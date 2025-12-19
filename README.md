@@ -211,6 +211,8 @@ If you prefer to set up manually or the scripts don't work:
    pip install -r requirements.txt
    ```
 
+   **Note:** When running `python backend/app.py`, the application will check for missing Python packages listed in `backend/requirements.txt` and attempt to install them automatically using the current Python executable (e.g., `python -m pip install -r backend/requirements.txt`). To disable automatic installation (useful in CI or locked environments), set the environment variable `DISABLE_AUTO_INSTALL=1` before launching the app.
+
 4. **Run Flask application**:
    ```bash
    python backend/app.py

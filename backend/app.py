@@ -3,9 +3,73 @@ Expense Tracker Flask Application
 A simple expense tracking application with SQLite database.
 """
 
+import sys
+import subprocess
+import os
+from importlib.metadata import PackageNotFoundError, distribution
+
+
+def ensure_dependencies(auto_install=True):
+    """
+    Ensure required packages from backend/requirements.txt are installed.
+    If missing packages are found and automatic install is enabled (default),
+    attempt to install them using the current Python executable.
+
+    Set environment variable DISABLE_AUTO_INSTALL=1 to skip automatic install.
+    """
+    req_file = os.path.join(os.path.dirname(__file__), 'requirements.txt')
+    if not os.path.exists(req_file):
+        return
+
+    required = []
+    with open(req_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#') or line.startswith('-e'):
+                continue
+            # Handle environment markers and version pins
+            pkg = line.split(';')[0].strip()
+            pkg = pkg.split('==')[0].strip()
+            required.append(pkg)
+
+    missing = []
+    for pkg in required:
+        try:
+            distribution(pkg)
+        except PackageNotFoundError:
+            missing.append(pkg)
+
+    if not missing:
+        return
+
+    if os.environ.get('DISABLE_AUTO_INSTALL') == '1' or not auto_install:
+        print(f"Missing packages: {missing}. Install them with: {sys.executable} -m pip install -r {req_file}")
+        sys.exit(1)
+
+    print(f"Missing packages detected: {missing}. Attempting to install from {req_file} using {sys.executable}...")
+    try:
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', req_file])
+    except subprocess.CalledProcessError as e:
+        print('Automatic installation failed:', e)
+        sys.exit(1)
+
+    # Verify install
+    still_missing = []
+    for pkg in missing:
+        try:
+            distribution(pkg)
+        except PackageNotFoundError:
+            still_missing.append(pkg)
+    if still_missing:
+        print(f"Some packages failed to install: {still_missing}. Please install them manually.")
+        sys.exit(1)
+
+
+# Run dependency check at startup
+ensure_dependencies()
+
 from flask import Flask, send_from_directory
 from flask_cors import CORS
-import os
 from config import DATABASE_URI
 from models import db, Expense
 from routes.expenses import expenses_bp
