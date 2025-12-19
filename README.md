@@ -4,8 +4,9 @@ A full-stack web application for tracking personal expenses with a modern React 
 
 ## Authors
 
-- **Kusuma** - Project Contributor
-- **Praveen** - Project Contributor
+- **Kusuma Pallu Manibabu**  - Project Contributor
+- **Praveen Kumar Reddy Dandu** - Project Contributor
+- **Patel Tanishakumari Udaykumar** - Project Contributor
 
 ## Features
 
