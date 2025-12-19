@@ -93,7 +93,6 @@ smart-expenses-tracker/
 │   └── utils/                       # Helper functions
 │       └── format.ts
 ├── instance/                        # SQLite database files (auto-generated) 🗄️
-├── screenshots/                     # Application screenshots 📸
 ├── .dockerignore                    # Docker ignore patterns 🐳
 ├── .gitignore                       # Git ignore patterns 🚫
 ├── Dockerfile                       # Docker container configuration 🐳
