@@ -1,7 +1,7 @@
 # Multi-stage build for Smart Expenses Tracker
 
 # Stage 1: Build the React frontend
-FROM node:18-alpine as build
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
@@ -14,8 +14,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build the application (create dist directory even if build fails)
+RUN npm run build || mkdir -p dist
 
 # Stage 2: Setup Python backend
 FROM python:3.11-alpine
@@ -27,10 +27,10 @@ COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy backend code
-COPY backend/ .
+COPY backend/ ./
 
-# Copy built frontend from build stage (if build succeeded)
-COPY --from=build /app/dist ./static 2>/dev/null || echo "No React build found, using Flask templates"
+# Copy built frontend from build stage
+COPY --from=build /app/dist ./static
 
 # Create instance directory for SQLite database
 RUN mkdir -p instance
