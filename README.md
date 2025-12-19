@@ -49,7 +49,7 @@ User Interface (React/Jinja) → API Layer (Flask Blueprints) → Business Logic
 ```
 smart-expenses-tracker/
 ├── backend/                          # Flask Backend Application
-│   ├── app.py                       # Main Flask application with routing logic
+│   ├── app.py                       # **Main executable file** - Flask application entry point
 │   ├── config.py                    # Database and app configuration
 │   ├── models.py                    # SQLAlchemy database models
 │   ├── requirements.txt             # Python dependencies
@@ -102,7 +102,7 @@ smart-expenses-tracker/
 ## File Structure Details
 
 ### Backend Files
-- **`app.py`**: Core application logic, routing, and Flask app initialization
+- **`app.py`**: **Main executable file** - Core application logic, routing, and Flask app initialization. Execution starts here when running `python backend/app.py`
 - **`config.py`**: Configuration management for database URI and app settings
 - **`models.py`**: Database models defining Expense entity with SQLAlchemy
 - **`routes/`**: Modular API endpoints separated by functionality
