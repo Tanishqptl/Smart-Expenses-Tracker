@@ -36,8 +36,10 @@ def serve_react_app(path):
         pass
     elif path and os.path.exists(os.path.join(app.static_folder, path)):
         return send_from_directory(app.static_folder, path)
-    else:
+    elif os.path.exists(os.path.join(app.static_folder, 'index.html')):
         return send_from_directory(app.static_folder, 'index.html')
+    else:
+        return "React app not built. Please run 'npm run build' and copy dist/ to backend/static/", 503
 
 
 @app.errorhandler(404)
