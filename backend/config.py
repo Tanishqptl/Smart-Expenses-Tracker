@@ -2,8 +2,8 @@ import os
 
 # Minimal config for local development. Adjust as needed.
 BASE_DIR = os.path.dirname(__file__)
-# SQLite database stored in backend/expenses.db
-DATABASE_URI = f"sqlite:///{os.path.join(BASE_DIR, 'expenses.db')}"
+# SQLite database stored in instance/expenses.db
+DATABASE_URI = f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'expenses.db')}"
 
 # Other config values
 SECRET_KEY = os.environ.get('FLASK_SECRET_KEY', 'dev-secret-key')
