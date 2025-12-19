@@ -1,23 +1,16 @@
-   python -m venv venv
-   ```
+#!/bin/bash
 
-3. **Activate virtual environment:**
-   - **Windows:** `venv\Scripts\activate`
-   - **macOS/Linux:** `source venv/bin/activate`
-
-4. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. **Create environment file:**
-   ```bash
-   # Create .env file with:
-   FLASK_APP=app.py
-   FLASK_ENV=development
-   SECRET_KEY=your-secret-key-here
-   DATABASE_URL=sqlite:///db.sqlite
-   ```
+# Legacy setup instructions - use setup.sh instead
+echo "This file is deprecated. Please use setup.sh for automated setup."
+echo ""
+echo "To run the automated setup:"
+echo "  ./setup.sh"
+echo ""
+echo "Or manually:"
+echo "1. Create virtual environment: python3 -m venv venv"
+echo "2. Activate: source venv/bin/activate"
+echo "3. Install deps: pip install -r backend/requirements.txt"
+echo "4. Run: python backend/app.py"
 
 6. **Run the application:**
    ```bash

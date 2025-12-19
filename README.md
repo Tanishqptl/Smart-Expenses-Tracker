@@ -150,6 +150,26 @@ smart-expenses-tracker/
 
 ## Installation
 
+### Quick Setup (Recommended)
+
+For the easiest setup experience, use our automated setup scripts:
+
+**On macOS/Linux:**
+```bash
+./setup.sh
+```
+
+**On Windows:**
+```cmd
+setup.bat
+```
+
+These scripts will:
+- Create a Python virtual environment
+- Install all required dependencies
+- Set up environment variables
+- Prepare the database directory
+
 ### Prerequisites
 - Python 3.8 or higher
 - Node.js 16 or higher
