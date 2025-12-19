@@ -10,8 +10,9 @@
 
 ## 👥 Authors
 
-- **Kusuma** - Project Contributor 👨‍💻
-- **Praveen** - Project Contributor 👨‍💻
+- **Kusuma Pallu Manibabu** - Project Contributor 👨‍💻
+- **Praveen Kumar Reddy Dandu** - Project Contributor 👨‍💻
+- **Patel Tanishakumari Udaykumar** - Project Contributor 👩‍💻
 
 ## ✨ Features
 
@@ -105,36 +106,36 @@ smart-expenses-tracker/
 └── vite.config.ts                   # Vite build configuration ⚡
 ```
 
-## 📋 File Structure Details
+## File Structure Details
 
-### Backend Files 🖥️
+### Backend Files
 - **`app.py`**: **Main executable file** - Core application logic, routing, and Flask app initialization. Execution starts here when running `python backend/app.py`
 - **`config.py`**: Configuration management for database URI and app settings
 - **`models.py`**: Database models defining Expense entity with SQLAlchemy
 - **`routes/`**: Modular API endpoints separated by functionality
 
-### Frontend Files 🎨
+### Frontend Files
 - **`src/App.tsx`**: Root React component with routing
 - **`src/components/`**: Modular UI components for different features
 - **`src/hooks/`**: Custom hooks for data fetching and state management
 - **`src/lib/`**: API utilities and helper functions
 
-### Configuration Files ⚙️
+### Configuration Files
 - **`package.json`**: Node.js project metadata and build scripts
 - **`requirements.txt`**: Python package dependencies
 - **`tailwind.config.js`**: Tailwind CSS customization
 - **`tsconfig.json`**: TypeScript compiler options
 - **`vite.config.ts`**: Vite bundler configuration
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-### Backend Technologies 🐍
+### Backend Technologies
 - **Flask**: Lightweight Python web framework
 - **SQLAlchemy**: Python SQL toolkit and ORM
 - **Flask-CORS**: Cross-origin resource sharing extension
 - **SQLite**: Embedded relational database
 
-### Frontend Technologies ⚛️
+### Frontend Technologies
 - **React 18**: Component-based UI library
 - **TypeScript**: Typed JavaScript for better development experience
 - **Vite**: Next-generation frontend tooling
@@ -142,167 +143,167 @@ smart-expenses-tracker/
 - **Framer Motion**: Animation library for React
 - **Radix UI**: Accessible UI components
 
-### Development Tools 🛠️
+### Development Tools
 - **Docker**: Containerization platform
 - **Git**: Version control system
 - **npm**: Package manager for Node.js
 - **pip**: Package installer for Python
 
-## 🚀 Installation
+## Installation
 
-### Prerequisites ✅
-- **Python 3.8** or higher 🐍
-- **Node.js 16** or higher 📦
-- **npm** or **yarn** package manager
-- **Docker** (optional, for containerized deployment) 🐳
+### Prerequisites
+- Python 3.8 or higher
+- Node.js 16 or higher
+- npm or yarn package manager
+- Docker (optional, for containerized deployment)
 
-### Backend Setup 🖥️
+### Backend Setup
 
-1. **📂 Navigate to project directory**:
+1. **Navigate to project directory**:
    ```bash
    cd smart-expenses-tracker
    ```
 
-2. **🐍 Create Python virtual environment**:
+2. **Create Python virtual environment**:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **📦 Install Python dependencies**:
+3. **Install Python dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **▶️ Run Flask application**:
+4. **Run Flask application**:
    ```bash
    python backend/app.py
    ```
 
-The backend will start on `http://localhost:5000` ✨
+The backend will start on `http://localhost:5000`
 
-### Frontend Setup (React Development) ⚛️
+### Frontend Setup (React Development)
 
-1. **📦 Install Node.js dependencies**:
+1. **Install Node.js dependencies**:
    ```bash
    npm install
    ```
 
-2. **🚀 Start development server**:
+2. **Start development server**:
    ```bash
    npm run dev
    ```
 
-The React app will start on `http://localhost:5173` ✨
+The React app will start on `http://localhost:5173`
 
-### Frontend Setup (Flask Templates) 🎨
+### Frontend Setup (Flask Templates)
 
 The Flask backend also serves traditional HTML templates for development:
 
 1. Ensure the backend is running
 2. Open `http://localhost:5000` in your browser
 
-### Docker Setup (Production) 🐳
+### Docker Setup (Production)
 
-1. **🏗️ Build Docker image**:
+1. **Build Docker image**:
    ```bash
    docker build -t smart-expenses-tracker .
    ```
 
-2. **🚀 Run container**:
+2. **Run container**:
    ```bash
    docker run -p 5000:5000 smart-expenses-tracker
    ```
 
-## 📖 Usage
+## Usage
 
-### Adding Expenses 💳
-1. Navigate to the "Add Expense" page ➕
-2. Fill in amount, category, date, and description ✏️
-3. Click "Add Expense" to save 💾
+### Adding Expenses
+1. Navigate to the "Add Expense" page
+2. Fill in amount, category, date, and description
+3. Click "Add Expense" to save
 
-### Viewing Dashboard 📊
-- Access the main dashboard for financial overview 👀
-- View total expenses, transaction count, and budget status 📈
-- Monitor spending trends and recent transactions 📋
+### Viewing Dashboard
+- Access the main dashboard for financial overview
+- View total expenses, transaction count, and budget status
+- Monitor spending trends and recent transactions
 
-### Analytics and Reports 📈
-- Navigate to the summary page for detailed analytics 📊
-- View category-wise expense breakdowns 📊
-- Analyze monthly spending trends 📅
-- Track budget compliance 🎯
+### Analytics and Reports
+- Navigate to the summary page for detailed analytics
+- View category-wise expense breakdowns
+- Analyze monthly spending trends
+- Track budget compliance
 
-## 🔗 API Endpoints
+## API Endpoints
 
-### Expense Management 💳
-- `GET /api/expenses` - 📥 Retrieve all expenses
-- `POST /api/expenses` - ➕ Create new expense
-- `GET /api/expenses/<id>` - 🔍 Get specific expense
-- `PUT /api/expenses/<id>` - ✏️ Update existing expense
-- `DELETE /api/expenses/<id>` - 🗑️ Delete expense
+### Expense Management
+- `GET /api/expenses` - Retrieve all expenses
+- `POST /api/expenses` - Create new expense
+- `GET /api/expenses/<id>` - Get specific expense
+- `PUT /api/expenses/<id>` - Update existing expense
+- `DELETE /api/expenses/<id>` - Delete expense
 
-### Analytics 📊
-- `GET /api/analytics/category-totals` - 📊 Category-wise expense totals
-- `GET /api/analytics/monthly-totals` - 📅 Monthly expense trends
-- `GET /api/analytics/summary` - 📋 General expense summary
+### Analytics
+- `GET /api/analytics/category-totals` - Category-wise expense totals
+- `GET /api/analytics/monthly-totals` - Monthly expense trends
+- `GET /api/analytics/summary` - General expense summary
 
-## 🗄️ Database
+## Database
 
 The application uses **SQLite** for data persistence with the following schema:
 
-### Expense Table 📋
-- `id`: Primary key (Integer) 🔑
-- `amount`: Expense amount (Float) 💰
-- `category`: Expense category (String) 🏷️
-- `date`: Expense date (Date) 📅
-- `description`: Optional description (String) 📝
+### Expense Table
+- `id`: Primary key (Integer)
+- `amount`: Expense amount (Float)
+- `category`: Expense category (String)
+- `date`: Expense date (Date)
+- `description`: Optional description (String)
 
-Database files are automatically created in the `instance/` directory 📁
+Database files are automatically created in the `instance/` directory.
 
-## 🔄 Development Workflow
+## Development Workflow
 
-### Local Development 🏠
-1. **⚙️ Setup Environment**: Install dependencies and setup virtual environments
-2. **▶️ Run Backend**: Start Flask development server
-3. **🎨 Run Frontend**: Start Vite development server for React
-4. **🗄️ Database**: SQLite database auto-creates on first run
-5. **🧪 Testing**: Run backend tests with pytest, frontend tests with npm
+### Local Development
+1. **Setup Environment**: Install dependencies and setup virtual environments
+2. **Run Backend**: Start Flask development server
+3. **Run Frontend**: Start Vite development server for React
+4. **Database**: SQLite database auto-creates on first run
+5. **Testing**: Run backend tests with pytest, frontend tests with npm
 
-### Production Deployment 🚀
-1. **🏗️ Build Frontend**: Run `npm run build` to create production assets
-2. **🐳 Build Docker Image**: Use provided Dockerfile for containerization
-3. **🚀 Deploy Container**: Run container with proper port mapping
-4. **💾 Database Backup**: Backup SQLite files for data persistence
+### Production Deployment
+1. **Build Frontend**: Run `npm run build` to create production assets
+2. **Build Docker Image**: Use provided Dockerfile for containerization
+3. **Deploy Container**: Run container with proper port mapping
+4. **Database Backup**: Backup SQLite files for data persistence
 
-### Code Quality ✨
-- **🔍 Linting**: Use ESLint for JavaScript/TypeScript
-- **🔒 Type Checking**: TypeScript for static type analysis
-- **🧪 Testing**: Unit tests for both frontend and backend
-- **🎨 Code Formatting**: Consistent formatting with Prettier
+### Code Quality
+- **Linting**: Use ESLint for JavaScript/TypeScript
+- **Type Checking**: TypeScript for static type analysis
+- **Testing**: Unit tests for both frontend and backend
+- **Code Formatting**: Consistent formatting with Prettier
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please follow these steps:
 
-1. **🍴 Fork the repository**
-2. **🌿 Create feature branch**: `git checkout -b feature/amazing-feature`
-3. **💻 Commit changes**: `git commit -m 'Add amazing feature'`
-4. **📤 Push to branch**: `git push origin feature/amazing-feature`
-5. **🔄 Open Pull Request**
+1. **Fork the repository**
+2. **Create feature branch**: `git checkout -b feature/amazing-feature`
+3. **Commit changes**: `git commit -m 'Add amazing feature'`
+4. **Push to branch**: `git push origin feature/amazing-feature`
+5. **Open Pull Request**
 
-### Development Guidelines 📋
+### Development Guidelines
 - Follow existing code style and conventions
 - Add tests for new features
 - Update documentation as needed
 - Ensure all tests pass before submitting PR
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 The MIT License allows for free use, modification, and distribution of the software, provided that the original copyright notice and disclaimer are included.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Flask**: For providing a simple yet powerful web framework
 - **React**: For the component-based frontend architecture
