@@ -336,4 +336,3 @@ The MIT License allows for free use, modification, and distribution of the softw
 
 ---
 
-**Built with ❤️ for students and developers learning full-stack development**
