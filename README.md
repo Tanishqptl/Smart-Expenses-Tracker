@@ -11,6 +11,20 @@ A full-stack web application for tracking personal expenses with a modern React 
 - **SQLite Database**: Lightweight, file-based database for data persistence
 - **RESTful API**: Backend API for expense operations
 
+## Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+*The main dashboard showing financial overview, spending by category, recent expenses, and financial tips.*
+
+### Add Expense
+![Add Expense](screenshots/add_expense.png)
+*Form to add new expenses with fields for amount, category, date, and description.*
+
+### Expense Summary
+![Expense Summary](screenshots/summary.png)
+*Analytics page with category-wise totals, monthly trends, and detailed expense breakdowns.*
+
 ## Tech Stack
 
 ### Backend
