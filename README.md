@@ -2,6 +2,11 @@
 
 A full-stack web application for tracking personal expenses with a modern React frontend and Flask backend API. This application allows users to manage their expenses efficiently with features like expense categorization, analytics, budgeting, and responsive design.
 
+## Authors
+
+- **Kusuma** - Project Contributor
+- **Praveen** - Project Contributor
+
 ## Features
 
 - **Expense Management**: Add, view, edit, and delete expenses with categorization
