@@ -150,9 +150,28 @@ smart-expenses-tracker/
 
 ## Installation
 
-### Quick Setup (Recommended)
+### 🚀 Quick Start with Docker (Recommended)
 
-For the easiest setup experience, use our automated setup scripts:
+For the most reliable setup that works on any device, use Docker:
+
+```bash
+# Clone the repository
+git clone https://github.com/Tanishqptl/Smart-Expenses-Tracker.git
+cd Smart-Expenses-Tracker
+
+# Run with Docker Compose (easiest)
+docker-compose up -d
+
+# Or build and run manually
+docker build -t smart-expenses-tracker .
+docker run -p 5000:5000 smart-expenses-tracker
+```
+
+That's it! The application will be available at `http://localhost:5000`
+
+### Quick Setup Scripts
+
+For the easiest setup experience without Docker, use our automated setup scripts:
 
 **On macOS/Linux:**
 ```bash
@@ -170,11 +189,9 @@ These scripts will:
 - Set up environment variables
 - Prepare the database directory
 
-### Prerequisites
-- Python 3.8 or higher
-- Node.js 16 or higher
-- npm or yarn package manager
-- Docker (optional, for containerized deployment)
+### Manual Setup
+
+If you prefer to set up manually or the scripts don't work:
 
 ### Backend Setup
 

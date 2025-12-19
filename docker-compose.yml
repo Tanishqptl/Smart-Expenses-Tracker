@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  smart-expenses-tracker:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./instance:/app/instance
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+      - SECRET_KEY=your-production-secret-key-change-this
+    restart: unless-stopped
